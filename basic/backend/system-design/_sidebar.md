@@ -6,7 +6,7 @@
     + [B　UML基础](/后端/设计模式/B_UML基础.md)
     + [C　设计原则](/后端/设计模式/C_设计原则)
 + **:art: 创建型模式**
-    + [M01　单例模式](/backend/system-design/m01_singleton.md)
+    + [M01　单例模式](/basic/backend/system-design/m01_singleton.md)
     + [M02　工厂方法模式]()
     + [M03　抽象工厂模式]()
     + [M04　建造者模式]()
