@@ -2,7 +2,7 @@
 
 ![logo](/static/logo.png)
 
-# 极客实验室  <small></small>
+# 极客实验室 <small>v2.0</small>
 
 > 计算机技术笔记
 
