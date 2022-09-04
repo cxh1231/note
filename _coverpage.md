@@ -1,6 +1,6 @@
 <!-- _coverpage.md 封面 -->
 
-![logo](/static/logo.png)
+![logo](https://img.zxdmy.com/2021/20220904105915.png)
 
 # 极客实验室 <small>v2.0</small>
 
@@ -8,5 +8,6 @@
 
 - 学无止境，知行致远！
 
+[基础知识篇](/basic/)
+[项目实战篇](/develop/)
 [研发社区](https://gitee.com/geekrdc)
-[开启笔记](/index/)

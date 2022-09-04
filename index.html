@@ -35,6 +35,14 @@
             border-top: 0;
         }
 
+        body > main > aside > div.sidebar-nav > ul > li > a {
+            font-size: 16px;
+        }
+
+        body > main > aside > div.sidebar-nav > ul > li > ul > li > a {
+            font-size: 16px;
+        }
+
         .advertisement {
             position: absolute;
             right: 1px;
@@ -93,11 +101,11 @@
 <script>
     window.$docsify = {
         // 正文左上角的 名称
-        name: '极客实验室',
-        nameLink: '/#/index/',
+        // name: '极客实验室',
+        // nameLink: '/#/index/',
         // 正文左上角的 LOGO
         // logo: '/static/favicon.ico',
-        repo: 'https://gitee.com/cxh1231/algorithm',
+        repo: 'https://gitee.com/geekrdc',
         coverpage: true,    // 开启封面
         onlyCover: true,    // 只显示封面
         loadSidebar: true,  // 自动加载侧边栏
@@ -118,7 +126,7 @@
             noData: {
                 '/': '没有检索到结果！'
             },
-            paths: 'auto',
+            paths: ['/#/basic', '/#/develop'],
             depth: 3,
             placeholder: {
                 '/': '输入搜索内容'
