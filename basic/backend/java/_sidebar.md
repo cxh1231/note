@@ -1,6 +1,6 @@
 <!-- 侧边栏 _sidebar.md -->
 
-+ [**:back: 返回首页**](/basic/)
++ [**:back: 返回首页**](/basic/README.md)
 + **Java 基础篇**
     + 面向对象
     + 编程基础
@@ -24,13 +24,13 @@
     + [并发包](/basic/backend/java/concurrent/9_j_u_c.md)
     + [更多](/basic/backend/java/concurrent/10_more.md)
 + **Java 底层篇**
-    + JVM 内存结构
-    + JVM 垃圾回收
-    + Java 对象模型
-    + Java 内存模型
-    + JVM 类加载机制
-    + JVM 参数及调优
-    + JVM 性能监控与故障处理工具
+    + [JVM 内存结构](/basic/backend/java/basement/1_jvm_memory_structure.md)
+    + [JVM 垃圾回收](/basic/backend/java/basement/2_jvm_garbage_collection.md)
+    + [Java 对象模型](/basic/backend/java/basement/3_java_object_model.md)
+    + [Java 内存模型](/basic/backend/java/basement/4_java_memory_model.md)
+    + [JVM 类加载机制](/basic/backend/java/basement/5_jvm_class_loader.md)
+    + [JVM 参数及调优](/basic/backend/java/basement/6_jvm_parameter_optimization.md)
+    + [JVM 性能监控与故障处理工具](/basic/backend/java/basement/7_jvm_performance_monitoring.md)
 + **Java 新特性**
     + Java 8 新特性
     + Java 9 新特性
