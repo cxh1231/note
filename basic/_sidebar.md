@@ -12,15 +12,7 @@
     + [:mag: MySQL](/basic/database/mysql/)
     + [:mag: Redis](/basic/database/redis/)
 + **:ledger: 计算机基础**
-    + :computer: 操作系统
-    + :globe_with_meridians: 计算机网络
+    + [:computer: 操作系统](/basic/cs-basic/os/README.md)
+    + [:globe_with_meridians: 计算机网络](/basic/cs-basic/network/README.md)
     + :floppy_disk: 计算机组成原理
 + **:books: 更多**
-
-[//]: # (    + [:memo: 剑指 Offer 刷题笔记]&#40;/算法/剑指Offer/&#41;)
-
-[//]: # (    + [:memo: LeetCode 刷题笔记]&#40;/算法/LeetCode/&#41;)
-
-[//]: # (+ **:ledger: 数据库**)
-
-[//]: # (    + [:mag: SQL 必知必会]&#40;/数据库/SQL必知必会/&#41;)

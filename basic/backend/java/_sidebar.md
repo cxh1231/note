@@ -11,7 +11,6 @@
     + IO 与序列化
     + 动态代理、反射与注解
     + 异常
-    + 更多
 + **Java 并发篇**
     + [线程基础](/basic/backend/java/concurrent/1_thread_basic.md)
     + [线程安全问题](/basic/backend/java/concurrent/2_thread_problem.md)
@@ -22,7 +21,6 @@
     + [ThreadLocal](/basic/backend/java/concurrent/7_threadlocal.md)
     + [线程池](/basic/backend/java/concurrent/8_threadpool.md)
     + [并发包](/basic/backend/java/concurrent/9_j_u_c.md)
-    + [更多](/basic/backend/java/concurrent/10_more.md)
 + **Java 底层篇**
     + [JVM 内存结构](/basic/backend/java/basement/1_jvm_memory_structure.md)
     + [JVM 垃圾回收](/basic/backend/java/basement/2_jvm_garbage_collection.md)

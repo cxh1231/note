@@ -1,5 +1,4 @@
 <!-- 侧边栏 _sidebar.md -->
 
 + [**:back: 返回首页**](/basic/README.md)
-+ [**MyBatis**](/basic/backend/middleware/mybatis.md)
-+ **RabbitMQ**
++ [**计算机网络**](/basic/cs-basic/network/README.md)

@@ -1,3 +1,6 @@
+<!-- 侧边栏 _sidebar.md -->
+
++ [**:back: 返回首页**](/basic/README.md)
 + **Redis 基础篇**
     + [Redis 基本概念](/basic/database/redis/basic/1_redis_basic.md)
     + [Redis 数据类型](/basic/database/redis/basic/2_redis_data_type.md)
@@ -8,7 +11,6 @@
     + [Redis 持久化机制](/basic/database/redis/basic/7_redis_persistence.md)
     + [缓存穿透、击穿、雪崩](/basic/database/redis/basic/8_redis_cache.md)
     + [Redis 优化](/basic/database/redis/basic/9_redis_optimization.md)
-
 + **Redis 高级篇**
     + [Redis 主从同步](/basic/database/redis/advance/1_redis_master_slave.md)
     + [Redis 与 MySQL 数据同步](/basic/database/redis/advance/2_redis_mysql_sync.md)
