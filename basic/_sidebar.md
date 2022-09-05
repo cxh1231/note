@@ -4,7 +4,7 @@
     + :bar_chart: 数据结构
     + :octocat: 算法分析与设计
 + **:notebook: 后端**
-    + [:tea: Java](/basic/backend/java/)
+    + [:tea: Java](/basic/backend/java/README.md)
     + [:leaves: Spring](/basic/backend/spring/)
     + [:wrench: 组件与中间件](/basic/backend/middleware/)
     + [:art: 系统设计模式](/basic/backend/system-design/)
