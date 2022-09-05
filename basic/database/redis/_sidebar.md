@@ -1,6 +1,6 @@
 <!-- 侧边栏 _sidebar.md -->
 
-+ [**:back: 返回首页**](/basic/README.md)
++ [**:back: 返回首页**](/basic/index.md)
 + **Redis 基础篇**
     + [Redis 基本概念](/basic/database/redis/basic/1_redis_basic.md)
     + [Redis 数据类型](/basic/database/redis/basic/2_redis_data_type.md)

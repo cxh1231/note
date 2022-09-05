@@ -1,6 +1,6 @@
 <!-- 侧边栏 _sidebar.md -->
 
-+ [**:back: 返回首页**](/basic/README.md)
++ [**:back: 返回首页**](/basic/index.md)
 + **Java 基础篇**
     + 面向对象
     + 编程基础

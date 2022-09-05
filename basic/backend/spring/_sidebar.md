@@ -1,6 +1,6 @@
 <!-- 侧边栏 _sidebar.md -->
 
-+ [**:back: 返回首页**](/basic/)
++ [**:back: 返回首页**](/basic/index.md)
 + [**框架基础**]()
 + [**Spring**](/basic/backend/spring/spring.md)
 + [**Spring Boot**](/basic/backend/spring/spring-boot.md)

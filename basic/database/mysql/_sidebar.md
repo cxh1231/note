@@ -1,6 +1,6 @@
 <!-- 侧边栏 _sidebar.md -->
 
-+ [**:back: 返回首页**](/basic/README.md)
++ [**:back: 返回首页**](/basic/index.md)
 + **MySQL 基础篇**
     + [MySQL 基础](/basic/database/mysql/basic/1_mysql_basic.md)
     + [MySQL 语句](/basic/database/mysql/basic/2_mysql_statement.md)
