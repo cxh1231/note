@@ -8,6 +8,6 @@
 
 - 学无止境，知行致远！
 
-[//]: # ([基础知识篇]&#40;/basic/&#41;)
-[//]: # ([项目实战篇]&#40;/develop/&#41;)
+[基础知识篇](/basic/index.md)
+[项目实战篇](/develop/index.md)
 [研发社区](https://gitee.com/geekrdc)
