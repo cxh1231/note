@@ -9,7 +9,7 @@
     + [枚举类](/basic/backend/java/basic/5_enum.md)
     + [泛型](/basic/backend/java/basic/6_generic.md)
     + [IO 与序列化](/basic/backend/java/basic/7_io_and_serialization.md)
-    + [动态代理、反射与注](/basic/backend/java/basic/8_proxy_reflection_annotation.md)
+    + [动态代理、反射与注解](/basic/backend/java/basic/8_proxy_reflection_annotation.md)
     + [异常](/basic/backend/java/basic/9_exception.md)
 + **Java 并发篇**
     + [线程基础](/basic/backend/java/concurrent/1_thread_basic.md)
