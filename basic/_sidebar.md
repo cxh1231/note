@@ -2,7 +2,7 @@
 
 + **:blue_book: 算法**
     + :bar_chart: 数据结构
-    + :octocat: 算法分析与设计
+    + [:octocat: 算法分析与设计](/basic/algorithm/index.md)
 + **:notebook: 后端**
     + [:tea: Java](/basic/backend/java/index.md)
     + [:leaves: Spring](/basic/backend/spring/index.md)
@@ -16,3 +16,5 @@
     + [:globe_with_meridians: 计算机网络](/basic/cs-basic/network/index.md)
     + :floppy_disk: 计算机组成原理
 + **:books: 更多**
+
+[//]: # (  + [笔试真题]&#40;/basic/zhenti/index.md&#41;)
