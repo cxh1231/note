@@ -9,7 +9,10 @@
     + [缓存穿透、击穿、雪崩](/basic/database/redis/basic/8_redis_cache.md)
     + [Redis 优化](/basic/database/redis/basic/9_redis_optimization.md)
 
-+ **Redis 高级篇**
-    + [Redis 主从同步](/basic/database/redis/advance/1_redis_master_slave.md)
-    + [Redis 与 MySQL 数据同步](/basic/database/redis/advance/2_redis_mysql_sync.md)
-    + [Redis 集群](/basic/database/redis/advance/3_redis_cluster.md)
++ **Redis 高可用篇**
+  + [Redis 主从同步](/basic/database/redis/advance/1_redis_master_slave.md)
+  + [Redis 哨兵模式](/basic/database/redis/advance/2_redis_sentinel.md)
+  + [Redis 集群模式](/basic/database/redis/advance/3_redis_cluster.md)
+
++ **Redis 综合篇**
+  + [Redis 与 MySQL 数据同步](/basic/database/redis/comprehensive/1_redis_mysql_sync.md)
