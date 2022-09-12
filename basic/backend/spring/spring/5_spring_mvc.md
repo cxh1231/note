@@ -69,3 +69,88 @@ Spring MVC 虽然整体流程复杂，但是真正需要开发人员进行处理
 1. **开发拦截器**：实现`handlerInterceptor`接口，从三个方法中选择合适的方法，实现拦截时要执行的具体业务逻辑。
 2. **注册拦截器**：定义配置类，并让它实现`WebMvcConfigurer`接口，在接口的`addInterceptors`方法中，注册拦截器，并定义该拦截器匹配哪些请求路径。
 
+## 5、Spring MVC 异常处理工作流程
+
+在开发 MVC 项目时，各个层均有可能抛出异常。
+
+`Spring MVC` 提供了一个通用的异常处理机制：
+
+系统的`Dao`、`Service`、`Controller`出现的异常，都通过 `throws Exception` 向上抛出，最后由Spring MVC **前端控制器** 交由**异常处理器**（`HandlerExceptionResolver`）进行异常处理，如下图:
+
+![image-20220912191439681](https://img.zxdmy.com/2022/202209121914859.png)
+
+自定义处理Spring MVC 的异常主要有三种方式：
+
++ 使用Spring MVC提供的 **简单异常处理器** `SimpleMappingExceptionResolver`；
++ 实现Spring的异常处理接口 `HandlerExceptionResolver` 自定义自己的异常处理器；
++ 使用`@ControllerAdvice` + `@ExceptionHandler` 注解
+
+#### SimpleMappingExceptionResolver
+
+SpringMVC中自带了一个**简单异常处理器**叫`SimpleMappingExceptionResolver`，该处理器实现了`HandlerExceptionResolver` 接口，**全局异常处理器都需要实现该接口**。
+
+![image-20220912192010194](https://img.zxdmy.com/2022/202209121920339.png)
+
+> 上图中的 `AbstractHandlerExceptionResolver` 实现了 `HandlerExceptionResolver` 接口
+
+通过 `XML` 配置 **简单异常处理器**：
+
+```xml
+<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+       <!-- 定义默认的异常处理页面 -->
+       <property name="defaultErrorView" value="error"/>
+       <!-- 定义异常处理页面用来获取异常信息的变量名，也可不定义，默认名为exception --> 
+       <property name="exceptionAttribute" value="ex"/>
+       <!-- 定义需要特殊处理的异常，这是重要点 --> 
+       <property name="exceptionMappings">
+           <props> <!--异常类型 错误视图-->       
+               <prop key="java.lang.RuntimeException">error</prop>
+           </props>
+           <!-- 还可以定义其他的自定义异常 -->
+       </property>
+   </bean> 
+```
+
+#### HandlerExceptionResolver
+
+```java
+package com.zking.ssm.book.exception;
+ 
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.ModelAndView;
+ 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+ 
+/**
+ * SpingMVC 提供的第二种全局异常处理方式  ,实现HandlerExceptionResolver接口
+ */
+@Component
+public class GlobalException implements HandlerExceptionResolver {
+    
+    /**
+     * @param httpServletRequest
+     * @param httpServletResponse
+     * @param o 异常处理的目标
+     * @param e 异常处理的类型
+     * @return
+     */
+    @Override
+    public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) {
+        ModelAndView mv=new ModelAndView();
+        mv.setViewName("error");
+        //判断异常的分类
+        if(e instanceof RuntimeException){
+                RuntimeException ex=(RuntimeException)e;
+                System.out.println(ex.getMessage());
+                mv.addObject("msg",ex.getMessage());
+        }
+        return mv;
+    }
+}
+```
+
+#### @ControllerAdvice + @ExceptionHandler
+
+![image-20220912192407685](https://img.zxdmy.com/2022/202209121924098.png)
