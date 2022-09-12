@@ -8,8 +8,8 @@
     + [Spring AOP](/basic/backend/spring/spring/3_spring_aop.md)
     + [Spring 事务](/basic/backend/spring/spring/4_spring_transaction.md)
     + [Spring MVC](/basic/backend/spring/spring/5_spring_mvc.md)
-+ [**Spring Boot**](/basic/backend/spring/spring-boot.md)
-    + [Spring Boot 概述](/basic/backend/spring/spring_boot/1_spring_boot_overview.md)
-    + [Spring Boot 自动装配](/basic/backend/spring/spring_boot/2_spring_boot_config.md)
-    + [Spring Boot 配置文件](/basic/backend/spring/spring_boot/3_spring_boot_config_file.md)
++ **Spring Boot**
+    + [Spring Boot 概述](/basic/backend/spring/spring-boot/1_spring_boot_overview.md)
+    + [Spring Boot 自动装配](/basic/backend/spring/spring-boot/2_spring_boot_autoconfig.md)
+    + [Spring Boot 启动原理](/basic/backend/spring/spring-boot/3_spring_boot_startup.md)
 + [**Spring Cloud**](/basic/backend/spring/spring-cloud.md)
