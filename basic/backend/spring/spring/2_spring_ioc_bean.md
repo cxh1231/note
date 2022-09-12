@@ -628,7 +628,7 @@ com.zxdmy.excite.admin.UserBean.myDestroyMethod
 
 ## 10、Bean 的各种问题
 
-### 9.1 单例 Bean 的线程安全问题
+### 10.1 单例 Bean 的线程安全问题
 
 > Spring中的单例 Bean **不是线程安全** 的。
 
@@ -641,7 +641,7 @@ com.zxdmy.excite.admin.UserBean.myDestroyMethod
 
 不过，**大部分 Bean 实际都是无状态**（没有实例变量）的（比如 Dao、Service），这种情况下， Bean 是线程安全的。
 
-### 9.2 Bean 的循环依赖问题
+### 10.2 Bean 的循环依赖问题
 
 #### 产生情况
 
@@ -736,7 +736,7 @@ Spring 的单例对象的初始化主要分为如下三步：
 
 ![image-20220908215315727](https://img.zxdmy.com/2022/202209082153006.png)
 
-### 9.3 Bean 的同名问题
+### 10.3 Bean 的同名问题
 
 - 同一个配置文件内同名的Bean，以最上面定义的为准
 - 不同配置文件中存在同名Bean，后解析的配置文件会覆盖先解析的配置文件
