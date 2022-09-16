@@ -1,1 +1,1 @@
-docsify serve ../note
+docsify serve ../note --port 8000

@@ -22,18 +22,14 @@
     + [线程池](/basic/backend/java/concurrent/8_threadpool.md)
     + [并发包](/basic/backend/java/concurrent/9_j_u_c.md)
 + **Java 底层篇**
-    + [JVM 内存结构](/basic/backend/java/basement/1_jvm_memory_structure.md)
-    + [JVM 垃圾回收](/basic/backend/java/basement/2_jvm_garbage_collection.md)
-    + [Java 对象模型](/basic/backend/java/basement/3_java_object_model.md)
-    + [Java 内存模型](/basic/backend/java/basement/4_java_memory_model.md)
-    + [JVM 类加载机制](/basic/backend/java/basement/5_jvm_class_loader.md)
-    + [JVM 参数及调优](/basic/backend/java/basement/6_jvm_parameter_optimization.md)
-    + [JVM 性能监控与故障处理工具](/basic/backend/java/basement/7_jvm_performance_monitoring.md)
+    + [JVM 内存结构](/basic/backend/java/jvm/1_jvm_memory_structure.md)
+    + [JVM 垃圾回收](/basic/backend/java/jvm/2_jvm_garbage_collection.md)
+    + [Java 对象模型](/basic/backend/java/jvm/3_java_object_model.md)
+    + [Java 内存模型](/basic/backend/java/jvm/4_java_memory_model.md)
+    + [JVM 类加载机制](/basic/backend/java/jvm/5_jvm_class_loader.md)
+    + [JVM 参数及调优](/basic/backend/java/jvm/6_jvm_parameter_optimization.md)
+    + [JVM 性能监控与故障处理工具](/basic/backend/java/jvm/7_jvm_performance_monitoring.md)
 + **Java 新特性**
-    + Java 8 新特性
-    + Java 9 新特性
-    + Java 10 新特性
-    + Java 11 新特性
-    + Java 12 新特性
-    + Java 13 新特性
-    + Java 14 新特性
+    + Java 8-10 新特性
+    + Java 11-15 新特性
+    + Java 16 新特性
