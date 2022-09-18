@@ -11,8 +11,8 @@
 
 + **Java 并发篇**
     + [线程基础](/basic/backend/java/concurrent/1_thread_basic.md)
-    + [线程安全问题](/basic/backend/java/concurrent/2_thread_problem.md)
-    + [线程创建](/basic/backend/java/concurrent/3_thread_create.md)
+    + [线程安全与 JMM](/basic/backend/java/concurrent/2_thread_safe_and_jmm.md)
+    + [线程创建与基本方法](/basic/backend/java/concurrent/3_thread_create_and_basic_method.md)
     + [锁与锁优化](/basic/backend/java/concurrent/4_lock_optimize.md)
     + [synchronized](/basic/backend/java/concurrent/5_synchronized.md)
     + [volatile](/basic/backend/java/concurrent/6_volatile.md)

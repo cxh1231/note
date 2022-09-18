@@ -1,8 +1,38 @@
-## 1、加锁：Lock 接口
+> 本文的内容，都是 `java.util.concurrent` 包下的。
+
+## 1、AQS
+
+#### AQS 简介
+
+`AQS` 的全称为 `AbstractQueuedSynchronizer` ，翻译过来的意思就是**抽象队列同步器**。这个类在 `java.util.concurrent.locks` 包下面。
+
+![image-20220815202754761](https://img.zxdmy.com/2022/202208152027352.png)
+
+`AQS` 就是一个**抽象类**，主要 **用来构建锁和同步器**。
+
+```java
+public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchronizer implements java.io.Serializable {
+}
+```
+
+`AQS` 为构建**锁**和**同步器**提供了一些 **通用功能的是实现**。
+
+因此，使用 `AQS` 能简单且高效地构造出应用广泛的大量的同步器，比如后续的 `ReentrantLock`，`Semaphore`，其他的诸如 `ReentrantReadWriteLock`，`SynchronousQueue`，`FutureTask` (jdk1.7) 等等皆是基于 `AQS` 的。
+
+#### AQS 原理
+
+`AQS` 核心思想是：
+
++ 如果被请求的**共享资源空闲**，则将当前请求资源的线程设置为有效的工作线程，并且将共享资源设置为锁定状态；
++ 如果被请求的**共享资源被占用**，那么就需要一套线程阻塞等待以及被唤醒时锁分配的机制，这个机制 AQS 是用 **CLH 队列锁**实现的，即将暂时获取不到锁的线程加入到队列中。
+
+![image-20220815202958637](https://img.zxdmy.com/2022/202208152029944.png)
+
+## 2、Lock 接口及其实现类（ReentrantLock等）
 
 > https://blog.csdn.net/xyy1028/article/details/107333451
 
-### 1.1 简介
+### 2.1 简介
 
 `java.util.concurrent.locks.Lock` 是一个类似于`synchronized` 关键字的线程同步机制。
 
@@ -10,18 +40,21 @@
 
 `Lock` 是个**接口**，其 **实现类** 有 `ReentrantLock` ，**内部类** 有`ReentrantReadWriteLock.ReadLock`，`ReentrantReadWriteLock.WriteLock` 。
 
-ReetrantLock 是一个可重入的独占锁，主要有两个特性，一个是支持公平锁和非公平锁，一个是可重入。 ReetrantLock 实现依赖于 AQS(AbstractQueuedSynchronizer)。
+`ReetrantLock` 是一个可重入的**独占锁**，主要有两个特性：
 
-ReetrantLock 主要依靠 AQS 维护一个阻塞队列，多个线程对加锁时，失败则会进入阻塞队列。等待唤醒，重新尝试加锁。
+1. 支持公平锁和非公平锁
+2. 支持重入锁
 
-### 1.2 常用方法
+`ReetrantLock` 实现依赖于 `AQS`（AbstractQueuedSynchronizer），即依靠 `AQS` 维护一个**阻塞队列**，多个线程对共享资源加锁时，失败的线程就会进入**阻塞队列**。等待唤醒，重新尝试加锁。
+
+### 2.2 常用方法
 
 **获取锁的方法**：
 
-+ `lock()` ：用来获取锁。如果锁已被其他线程获取，则进行等待。
-+ `tryLock()` ：用来尝试获取锁。如果获取成功，则返回 **true**，如果获取失败（即锁已被其他线程获取），则返回 **false** 。
-+ `tryLock(long time, TimeUnit unit)` ：如果一开始或在等待时间内拿到锁，则返回 **true**，否则会等待一段时间，直至时间结束，返回 **false**。
-+ `lockInterruptibly()` ：如果该线程正在等待获取锁，可以通过 `thread.interrupt()` 中断该线程的等待状态。（即可中断锁）
++ `lock()` ：用来**获取锁**。如果锁已被其他线程获取，则进行等待。
++ `tryLock()` ：用来**尝试获取锁**。如果获取成功，则返回 **true**，如果获取失败（即锁已被其他线程获取），则返回 **false** 。
++ `tryLock(long time, TimeUnit unit)` ：如果一开始或在**等待时间内拿到锁**，则返回 **true**，否则会等待一段时间，直至时间结束，返回 **false**。
++ `lockInterruptibly()` ：如果该线程正在等待获取锁，可以通过 `thread.interrupt()` 中断该线程的等待状态。（即**可中断锁**）
 
 **释放锁的方法**：
 
@@ -45,7 +78,7 @@ ReetrantLock 主要依靠 AQS 维护一个阻塞队列，多个线程对加锁�
     }
 ```
 
-### 1.3 ReentrantLock 的高级功能
+### 2.3 ReentrantLock 的高级功能
 
 #### 等待可中断
 
@@ -57,9 +90,8 @@ ReetrantLock 主要依靠 AQS 维护一个阻塞队列，多个线程对加锁�
 
 #### 可实现公平锁
 
-指多个线程等待同一个锁时，必须按照申请锁的时间顺序依次获得锁。
-
-非公平锁则在锁被释放时，任何一个等待锁的线程都有机会获得锁。
++ **公平锁** 指多个线程等待同一个锁时，必须 **按照申请锁的时间顺序依次获得锁**。
++ **非公平锁** 则在锁被释放时，任何一个等待锁的线程**都有机会获得锁**。
 
 `ReentrantLock` 默认是非公平的。
 
@@ -184,7 +216,7 @@ class ThreadB extends Thread {
 }
 ```
 
-### 1.4 synchronized 与 Lock 的异同
+### 2.4 synchronized 与 Lock 的异同
 
 |  区别点  |           synchronized 关键词            |         Lock / ReentrantLock 接口          |
 | :------: | :--------------------------------------: | :----------------------------------------: |
@@ -207,11 +239,11 @@ class ThreadB extends Thread {
 
 **多个读锁之间不互斥**，读锁与写锁互斥，写锁与写锁互斥。
 
-## 2、JUC 包的原子类（Atomic）
+## 3、Atomic（原子类）
 
 #### 简介与类型
 
-`Atomic` 是指一个**操作是不可中断的**。即使是在多个线程一起执行的时候，一个操作一旦开始，就不会被其他线程干扰。
+`Atomic` （英：原子的）是指一个**操作是不可中断的**。即使是在多个线程一起执行的时候，一个操作一旦开始，就不会被其他线程干扰。
 
 所以，**所谓原子类说简单点就是具有原子 / 原子操作特征的类**。
 
@@ -396,25 +428,3 @@ class People {
 }
 ```
 
-## 3、JUC包的 AQS
-
-#### 简介
-
-`AQS` 的全称为 `AbstractQueuedSynchronizer` ，翻译过来的意思就是**抽象队列同步器**。这个类在 `java.util.concurrent.locks` 包下面。
-
-![image-20220815202754761](https://img.zxdmy.com/2022/202208152027352.png)
-
-`AQS` 就是一个**抽象类**，主要 **用来构建锁和同步器**。
-
-```java
-public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchronizer implements java.io.Serializable {
-}
-```
-
-`AQS` 为构建锁和同步器提供了一些通用功能的是实现，因此，使用 AQS 能简单且高效地构造出应用广泛的大量的同步器，比如前文的 `ReentrantLock`，`Semaphore`，其他的诸如 `ReentrantReadWriteLock`，`SynchronousQueue`，`FutureTask` (jdk1.7) 等等皆是基于 AQS 的。
-
-#### 原理
-
-AQS 核心思想是，如果被请求的共享资源空闲，则将当前请求资源的线程设置为有效的工作线程，并且将共享资源设置为锁定状态。如果被请求的共享资源被占用，那么就需要一套线程阻塞等待以及被唤醒时锁分配的机制，这个机制 AQS 是用 **CLH 队列锁**实现的，即将暂时获取不到锁的线程加入到队列中。
-
-![image-20220815202958637](https://img.zxdmy.com/2022/202208152029944.png)
