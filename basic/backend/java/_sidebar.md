@@ -29,6 +29,6 @@
     + [JVM 参数及调优](/basic/backend/java/jvm/6_jvm_parameter_optimization.md)
     + [JVM 性能监控与故障处理工具](/basic/backend/java/jvm/7_jvm_performance_monitoring.md)
 + **Java 新特性**
-    + Java 8-10 新特性
+    + [Java 8-10 新特性](/basic/backend/java/new-feature/1_java8_10.md)
     + Java 11-15 新特性
     + Java 16 新特性
