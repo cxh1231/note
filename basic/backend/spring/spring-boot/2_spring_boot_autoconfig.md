@@ -12,7 +12,7 @@
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @ComponentScan(excludeFilters = { @Filter(type = FilterType.CUSTOM, classes = TypeExcludeFilter.class),
-		@Filter(type = FilterType.CUSTOM, classes = AutoConfigurationExcludeFilter.class) })
+        @Filter(type = FilterType.CUSTOM, classes = AutoConfigurationExcludeFilter.class) })
 public @interface SpringBootApplication {
     ……
 }
@@ -28,7 +28,7 @@ public @interface SpringBootApplication {
 @Indexed
 public @interface SpringBootConfiguration {
     @AliasFor(
-        annotation = Configuration.class
+            annotation = Configuration.class
     )
     boolean proxyBeanMethods() default true;
 }
@@ -52,7 +52,7 @@ public @interface SpringBootConfiguration {
 
 进入 `@EnableAutoConfiguration` 注解的接口类中，可以看到如下代码：
 
-![image-20220912202305667](2、Spring Boot 自动装配.assets/image-20220912202305667.png)
+![image-20220912202305667](https://img.zxdmy.com/2022/202209191052028.png)
 
 `@EnableAutoConfiguration` 注解包含 **两个关键的注解**，其主要功能如下：
 
@@ -261,8 +261,3 @@ public class HelloTest {
 
 至此，本简单 Demo 已经实现了 **自动装配** 能力。
 
-## 5、总结
-
-Spring Boot 的自动装配机制是 Spring Boot 的核心特性之一，它可以让我们在开发中更加专注于业务逻辑的开发，而不用关心各种配置的问题。
-
-Spring Boot 的自动装配机制是通过 `@EnableAutoConfiguration` 注解实现的，它会扫描 `META-INF/spring.factories` 文件中的 `org.springframework.boot.autoconfigure.EnableAutoConfiguration` 配置项，然后根据 `spring-autoconfigure-metadata.properties` 文件中的配置规则，对候选类进行过滤，最后将过滤后的类加载到 Spring 容器中。
