@@ -23,11 +23,11 @@
     + [并发包(AQS、LOCK、Atomic等)](/basic/backend/java/concurrent/9_j_u_c.md)
 + **Java 底层篇**
     + [JVM 内存结构](/basic/backend/java/jvm/1_jvm_memory_structure.md)
-    + [JVM 类加载机制](/basic/backend/java/jvm/5_jvm_class_loader.md)
+    + [JVM 类加载机制](/basic/backend/java/jvm/2_jvm_class_loader.md)
     + [JVM 对象创建机制](/basic/backend/java/jvm/3_java_object_model.md)
-    + [JVM 垃圾回收](/basic/backend/java/jvm/2_jvm_garbage_collection.md)
-    + [JVM 参数及调优](/basic/backend/java/jvm/6_jvm_parameter_optimization.md)
-    + [JVM 性能监控与故障处理工具](/basic/backend/java/jvm/7_jvm_performance_monitoring.md)
+    + [JVM 垃圾回收](/basic/backend/java/jvm/4_jvm_garbage_collection.md)
+    + [JVM 参数及调优](/basic/backend/java/jvm/5_jvm_parameter_optimization.md)
+    + [JVM 性能监控与故障处理工具](/basic/backend/java/jvm/6_jvm_performance_monitoring.md)
 + **Java 新特性**
     + [Java 8-10 新特性](/basic/backend/java/new-feature/1_java8_10.md)
     + Java 11-15 新特性
