@@ -135,7 +135,7 @@ MyBatis的基本工作流程如下：
 
 ### 2.2 MyBatis 功能架构
 
-一般把Mybatis的功能架构分为三层：
+一般把`Mybatis`的功能架构分为三层：
 
 ![image-20220930152606197](https://img.zxdmy.com/2022/202209301526195.png)
 
@@ -143,62 +143,110 @@ MyBatis的基本工作流程如下：
 + **数据处理层**：负责具体的SQL查找、SQL解析、SQL执行和执行结果映射处理等。它主要的目的是根据调用的请求完成一次数据库操作。
 + **基础支撑层**：负责最基础的功能支撑，包括连接管理、事务管理、配置加载和缓存处理，这些都是共用的东西，将他们抽取出来作为最基础的组件。为上层的数据处理层提供最基础的支撑。
 
+### 2.3 MyBatis Mapper 接口实现原理
 
-
-
-
-
-
-
-
-### Dao 接口的工作原理与注意事项
-
-#### 工作原理
+#### 原理概述
 
 通常一个 `XML` 映射文件，都与一个 `Dao` 接口相对应。
 
-`Dao 接口` 即 `Mapper 接口`。
+`Dao` 接口 即 `Mapper` 接口。
 
 `MyBatis` 是采用 **代理开发方式** 实现 `Dao` 层的开发，即 `MyBatis` 框架根据接口定义，创建接口的**动态代理对象**，**动态代理对象** 的 **方法体** 即 **Dao 接口实现类** 的方法。
 
 为了实现上面的 **动态代理对象的方法体**，`Mapper.xml` 接口开发需要遵循以下规范：
 
 + Mapper 接口 的全限定名 和 Mapper.xml 文件中的 namespace 相同；
-+ Mapper 接口方法名 和 Mapper.xml 中定义的每个 `statement 的 id 相同`；
-+ Mapper接口方法 的 `输入参数类型` 和 mapper. xml 中定义的 `每个 SQL 的 parameterType 类型相同`；
-+ Mapper接口方法 的 `输出参数类型` 和 mapper.xml 中定义的 `每个 SQL 的 resultType 的类型相同`。
++ Mapper 接口方法名和 Mapper.xml 中定义的每个 `statement` 的 `id` 相同；
++ Mapper 接口方法的 **输入参数类型** 和 mapper. xml 中定义的每个 `SQL` 的 `parameterType` 类型相同；
++ Mapper 接口方法的 **输出参数类型** 和 mapper.xml 中定义的每个 `SQL` 的 `resultType` 的类型相同。
 
+Mapper 接口是没有实现类的，当调用接口方法时，接口全限名+方法名的拼接字符串作为key值，可唯一定位一个`MapperStatement`。
 
+#### 实现流程
 
-Mapper接口是没有实现类的，当调用接口方法时，接口全限名+方法名的拼接字符串作为key值，可唯一定位一个MapperStatement。
+Mapper 接口不需要实现类，其采用 **动态代理** 的方式实现，其基本流程如下图所示：
+
+![image-20221005155821104](https://img.zxdmy.com/2022/202210051558453.png)
+
+1、获取Mapper
+
+`Mapper` 映射是通过 **动态代理** 实现的
+
+获取 Mapper 需要先获取 `MapperProxyFactory` ，即 Mapper 代理工厂。
+
+2、MapperProxyFactory
+
+`MapperProxyFactory` 的作用是生成 `MapperProxy`（Mapper代理对象）。
+
+代理的方法被放到了 `MapperProxy` 中。
+
+3、MapperProxy
+
+`MapperProxy` 里，通常会生成一个`MapperMethod`对象，它是通过 `cachedMapperMethod` 方法对其进行初始化的，然后执行 `excute()` 方法。
+
+4、MapperMethod
+
+`MapperMethod` 里的`excute()`方法，会真正去执行`sql`。
+
+这里用到了命令模式，其实最终它还是通过SqlSession的实例去运行对象的sql。
 
 #### 注意事项
 
 Dao接口里的方法，是不能重载的，因为是全限名+方法名的保存和寻找策略。
 
-Dao接口的工作原理是JDK动态代理，Mybatis运行时会使用JDK动态代理为Dao接口生成代理proxy对象，代理对象proxy会拦截接口方法，转而执行MappedStatement所代表的sql，然后将sql执行结果返回。
+Dao接口的工作原理是 **JDK动态代理**，Mybatis运行时会使用JDK动态代理为Dao接口生成代理proxy对象，代理对象proxy会拦截接口方法，转而执行MappedStatement所代表的sql，然后将sql执行结果返回。
 
+### 2.4 MyBatis 执行器
 
+Mybatis有三种基本的Executor执行器，SimpleExecutor、ReuseExecutor、BatchExecutor。
 
+![image-20221005161112189](https://img.zxdmy.com/2022/202210051611115.png)
 
++ `SimpleExecutor` ：每执行一次 update 或 select，就开启一个Statement对象，用完立刻关闭Statement对象。
++ `ReuseExecutor` ：执行 update 或 select，以sql作为key查找Statement对象，存在就使用，不存在就创建。用完后，不关闭Statement对象，而是放置于`Map<String,Statement>`内，供下一次使用。简言之，就是重复使用Statement对象。
++ `BatchExecutor` ：执行 update（没有select，JDBC批处理不支持select），将所有sql都添加到批处理中 `addBatch()`，等待统一执行 `executeBatch()` ，它缓存了多个Statement对象，每个Statement对象都是`addBatch()`完毕后，等待逐一执行`executeBatch()`批处理。与JDBC批处理相同。
 
+> Executor 的这些特点，都严格限制在SqlSession生命周期范围内。
 
+在Mybatis配置文件中，在设置（settings）可以指定默认的ExecutorType执行器类型，也可以手动给DefaultSqlSessionFactory的创建SqlSession的方法传递ExecutorType类型参数，如SqlSession openSession(ExecutorType execType)。
 
+配置默认的执行器：
 
-
-
-
-
++ SIMPLE 就是普通的执行器；
++ REUSE 执行器会重用预处理语句（prepared statements）；
++ BATCH 执行器将重用语句并执行批量更新。
 
 ## 3、MyBatis 插件
 
+### 3.1 插件运行原理
 
+Mybatis 会话的运行需要 `ParameterHandler`、`ResultSetHandler`、`StatementHandler`、`Executor`这四大对象的配合。
 
+插件的**原理**就是**在这四大对象调度的时候，插入一些我们自己的代码**。
 
+![image-20221005161741786](https://img.zxdmy.com/2022/202210051617810.png)
 
+Mybatis 使用 JDK 的动态代理，为目标对象生成代理对象。
 
+它提供了一个工具类 `Plugin` ，实现了 `InvocationHandler` 接口。
 
+![image-20221005161934300](https://img.zxdmy.com/2022/202210051619356.png)
 
+使用 `Plugin` 生成代理对象，代理对象在调用方法的时候，就会进入`invoke`方法。
+
+在invoke方法中，如果存在签名的拦截方法，插件的intercept方法就会在这里被我们调用，然后就返回结果。如果不存在签名方法，那么将直接反射调用我们要执行的方法。
+
+### 3.2 分页插件
+
+`MyBatis`使用`RowBounds`对象进行分页，它是针对`ResultSet`结果集执行的内存分页，而非物理分页。
+
+可以在sql内直接书写带有物理分页的参数来完成物理分页功能，也可以使用分页插件来完成物理分页。
+
+其原理是：
+
++ 分页插件的基本原理是**使用Mybatis提供的插件接口，实现自定义插件，拦截`Executor`的`query`方法**
++ 在执行查询的时候，拦截待执行的sql，然后**重写sql**，根据dialect方言，添加对应的物理分页语句和物理分页参数。
++ 举例：`select * from student`，拦截sql后重写为：`select t.* from (select * from student) t limit 0, 10`
 
 ## 4、MyBatis 实战
 
@@ -339,34 +387,10 @@ public class Category {
 </insert>
 ```
 
-
-
-
-
-
-
 ### 4.7 MyBatis 批量操作
 
+**批量操作** 可以使用 `<foreach>` 标签，或 `ExecutorType.BATCH` 方法，实现批量操作。
 
 
 
-
-
-
-
-
-
-
-
-
-### 1.2 Xml 映射文件中，除了常见的 select|insert|update|delete 标签之外，还有哪些标签
-
-`<resultMap>` 、 `<parameterMap>` 、 `<sql>` 、 `<include>` 、 `<selectKey>` ，加上动态 sql 的 9 个标签， `trim|where|set|foreach|if|choose|when|otherwise|bind` 等，其中 `<sql>` 为 sql 片段标签，通过 `<include>` 标签引入 sql 片段， `<selectKey>` 为不支持自增的主键生成策略标签。
-
-
-
-
-
-## maven 和 gradle 有了解吗
-
-> [https://www.javalearn.cn/#/doc/Mybatis/面试题](https://www.javalearn.cn/#/doc/Mybatis/面试题)
+[https://www.javalearn.cn/#/doc/Mybatis/面试题](https://www.javalearn.cn/#/doc/Mybatis/面试题)
