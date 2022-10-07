@@ -76,11 +76,11 @@
 
 源码中 ThreadPoolExecutor 中有个内置对象Worker，每个worker都是一个线程，worker线程数量和参数有关，每个worker会while死循环从阻塞队列中取数据，**通过置换worker中Runnable对象，运行其run方法起到线程置换的效果**，这样做的好处是避免多线程频繁线程切换，提高程序运行性能。
 
-## 4、ThreadPoolExecutor 类
+## 4、ThreadPoolExecutor 类【重要】
 
 > 线程池实现类 `ThreadPoolExecutor` 是 `Executor` 框架最核心的类。
 
-#### ThreadPoolExecutor 类分析
+#### ThreadPoolExecutor 类的7个参数
 
 `ThreadPoolExecutor` 类中提供的四个构造方法。其中最基础的构造方法如下：
 
@@ -301,7 +301,7 @@ Process finished with exit code 0
 - **`shutdown（）`** :关闭线程池，线程池的状态变为 `SHUTDOWN`。线程池不再接受新任务了，但是队列里的任务得执行完毕。
 - **`shutdownNow（）`** :关闭线程池，线程的状态变为 `STOP`。线程池会终止当前正在运行的任务，并停止处理排队的任务并返回正在等待执行的 List。
 
- `isTerminated()` VS `isShutdown()`
+`isTerminated()` VS `isShutdown()`
 
 - **`isShutDown`** 当调用 `shutdown()` 方法后返回为 true。
 - **`isTerminated`** 当调用 `shutdown()` 方法后，并且所有提交的任务完成后返回为 true
@@ -318,7 +318,7 @@ Process finished with exit code 0
 
 ![image-20220815163618386](https://img.zxdmy.com/2022/202208151636728.png)
 
-#### FixedThreadPool
+### 5.1 FixedThreadPool
 
 **实现源码：**
 
@@ -338,6 +338,10 @@ public static ExecutorService newFixedThreadPool(int nThreads, ThreadFactory thr
 
 > 创建的 `FixedThreadPool` 的 `corePoolSize` 和 `maximumPoolSize` 都被设置为 nThreads。
 
+**应用场景**
+
+适用于处理 **CPU密集型** 的任务，确保CPU在长期被工作线程使用的情况下，尽可能的少的分配线程，即适用执行长期的任务。
+
 **不足：**
 
 1. 当线程池中的线程数达到 `corePoolSize` 后，新任务将在无界队列中等待，因此线程池中的线程数不会超过 corePoolSize；
@@ -345,7 +349,7 @@ public static ExecutorService newFixedThreadPool(int nThreads, ThreadFactory thr
 3. 由于 1 和 2，使用无界队列时 `keepAliveTime` 将是一个无效参数；
 4. 运行中的 `FixedThreadPool`（未执行 `shutdown()`或 `shutdownNow()`）不会拒绝任务，在任务比较多的时候会导致 OOM（内存溢出）
 
-#### SingleThreadExecutor 
+### 5.2 SingleThreadExecutor
 
 **实现源码**：
 
@@ -364,11 +368,15 @@ public static ExecutorService newSingleThreadExecutor(ThreadFactory threadFactor
 }
 ```
 
+**应用场景**
+
+适用于串行执行任务的场景，一个任务一个任务地执行。
+
 **不足：**
 
 `SingleThreadExecutor` 使用无界队列 `LinkedBlockingQueue` 作为线程池的工作队列（队列的容量为 Intger.MAX_VALUE）。`SingleThreadExecutor` 使用无界队列作为线程池的工作队列会对线程池带来的影响与 `FixedThreadPool` 相同。说简单点就是可能会导致 OOM，
 
-#### CachedThreadPool 
+### 5.3 CachedThreadPool
 
 **实现源码**：
 
@@ -386,9 +394,32 @@ public static ExecutorService newCachedThreadPool(ThreadFactory threadFactory) {
 }
 ```
 
+**应用场景**
+
+用于并发执行大量短期的小任务
+
 **不足：**
 
-`CachedThreadPool`允许创建的线程数量为 `Integer.MAX_VALUE` ，可能会创建大量线程，从而导致 OOM。
+`CachedThreadPool`允许创建的线程数量为 `Integer.MAX_VALUE` ，可能会创建大量线程，从而导致 `OOM`。
+
+### 5.4 ScheduledThreadPool
+
+**实现源码**：
+
+```java
+public ScheduledThreadPoolExecutor(int corePoolSize) {
+    super(corePoolSize, Integer.MAX_VALUE, 0,
+          NANOSECONDS,new DelayedWorkQueue());
+}
+```
+
+**使用场景**
+
+周期性执行任务的场景，需要限制线程数量的场景
+
+**不足**
+
+`FixedThreadPool`使用了**无界**的阻塞队列`LinkedBlockingQueue`，如果线程获取一个任务后，任务的执行时间比较长，会导致队列的任务越积越多，导致机器内存使用不停飙升，最终导致`OOM`。
 
 ## 6、线程池的 7 种阻塞队列
 
@@ -431,12 +462,106 @@ CPU密集的意思是该任务需要最大的运算，而没有阻塞，CPU一�
 
 CPU密集任务只有在真正的多核CPU上才能得到加速(通过多线程)。而在单核CPU上，无论你开几个模拟的多线程该任务都不可能得到加速，因为CPU总的运算能力就那么多。
 
+所以，CPU 密集型的线程池数不要过大，一般推荐：
+
++ `CPU数 + 1`，+1是因为可能存在页缺失（可能存在有些数据在硬盘中需要多来一个线程将数据读入内存）。
+
 > 更多与线程池相关的实战，参考：
 >
 > [https://tech.meituan.com/2020/04/02/java-pooling-pratice-in-meituan.html](https://tech.meituan.com/2020/04/02/java-pooling-pratice-in-meituan.html)
 
+## 8、线程池异常处理
 
+常见的异常处理方式：
 
++ `try-catch` 捕获异常
++ `submit`执行，`Future.get`接受异常
++ 重写`ThreadPoolExecutor.afterExcute`方法，处理传递的异常引用
++ 实例化时，传入自己的`ThreadFactory`，设置`Thread.UncaughtExceptionHandler`处理未检测的异常
 
+## 9、Fork/Join 框架
 
-多线程同步怎么做？
+Fork/Join框架是Java7提供的一个用于并行执行任务的框架，是一个把大任务分割成若干个小任务，最终汇总每个小任务结果后得到大任务结果的框架。
+
+#### 分而治之
+
+Fork/Join框架的定义，其实就体现了分治思想：将一个规模为N的问题分解为K个规模较小的子问题，这些子问题相互独立且与原问题性质相同。求出子问题的解，就可得到原问题的解。
+
+![image-20221007214049052](https://img.zxdmy.com/2022/202210072140441.png)
+
+#### 工作窃取算法
+
+大任务拆成了若干个小任务，把这些小任务放到不同的队列里，各自创建单独线程来执行队列里的任务。
+
+那么问题来了，有的线程干活块，有的线程干活慢。干完活的线程不能让它空下来，得让它去帮没干完活的线程干活。它去其它线程的队列里窃取一个任务来执行，这就是所谓的工作窃取。
+
+工作窃取发生的时候，它们会访问同一个队列，为了减少窃取任务线程和被窃取任务线程之间的竞争，通常任务会使用双端队列，被窃取任务线程永远从双端队列的头部拿，而窃取任务的线程永远从双端队列的尾部拿任务执行。
+
+![image-20221007214110158](B-8、线程池.assets/image-20221007214110158.png)
+
+#### 示例
+
+看一个Fork/Join框架应用的例子，计算1~n之间的和：1+2+3+…+n
+
++ 设置一个分割阈值，任务大于阈值就拆分任务
++ 任务有结果，所以需要继承RecursiveTask
+
+```java
+public class CountTask extends RecursiveTask<Integer> {
+    private static final int THRESHOLD = 16; // 阈值
+    private int start;
+    private int end;
+    
+    public CountTask(int start, int end) {
+        this.start = start;
+        this.end = end;
+    }
+    
+    @Override
+    protected Integer compute() {
+        int sum = 0;
+        // 如果任务足够小就计算任务
+        boolean canCompute = (end - start) <= THRESHOLD;
+        if (canCompute) {
+            for (int i = start; i <= end; i++) {
+                sum += i;
+            }
+        }
+        // 如果任务大于阈值，就分裂成两个子任务计算
+        else {
+            int middle = (start + end) / 2;
+            CountTask leftTask = new CountTask(start, middle);
+            CountTask rightTask = new CountTask(middle + 1, end);
+            // 执行子任务
+            leftTask.fork();
+            rightTask.fork(); 
+            // 等待子任务执行完，并得到其结果
+            int leftResult = leftTask.join();
+            int rightResult = rightTask.join();
+            // 合并子任务
+            sum = leftResult + rightResult;
+        }
+        return sum;
+    }
+    
+    public static void main(String[] args) {
+        ForkJoinPool forkJoinPool = new ForkJoinPool(); // 生成一个计算任务，负责计算1+2+3+4
+        CountTask task = new CountTask(1, 100); // 执行一个任务
+        Future<Integer> result = forkJoinPool.submit(task);
+        try {
+            System.out.println(result.get());
+        } catch (InterruptedException e) {
+            
+        } catch (ExecutionException e) {
+        
+        }
+    }
+}
+```
+
+`ForkJoinTask`与一般Task的主要区别在于它需要实现`compute`方法，在这个方法里，首先需要判断任务是否足够小，如果足够小就直接执行任务。
+
+如果比较大，就必须分割成两个子任务，每个子任务在调用fork方法时，又会进compute方法，看看当前子任务是否需要继续分割成子任务，如果不需要继续分割，则执行当前子任务并返回结果。
+
+使用join方法会等待子任务执行完并得到其结果。
+

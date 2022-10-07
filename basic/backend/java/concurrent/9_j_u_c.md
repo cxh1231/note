@@ -2,7 +2,7 @@
 
 ## 1、AQS
 
-#### AQS 简介
+### 1.1 AQS 简介
 
 `AQS` 的全称为 `AbstractQueuedSynchronizer` ，翻译过来的意思就是**抽象队列同步器**。这个类在 `java.util.concurrent.locks` 包下面。
 
@@ -15,18 +15,48 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
 }
 ```
 
-`AQS` 为构建**锁**和**同步器**提供了一些 **通用功能的是实现**。
+`AQS` 为构建 **锁** 和 **同步器** 提供了一些 **通用功能的是实现**。
+
+并发包中的 **锁**，就是基于 `AQS` 实现的。
 
 因此，使用 `AQS` 能简单且高效地构造出应用广泛的大量的同步器，比如后续的 `ReentrantLock`，`Semaphore`，其他的诸如 `ReentrantReadWriteLock`，`SynchronousQueue`，`FutureTask` (jdk1.7) 等等皆是基于 `AQS` 的。
 
-#### AQS 原理
+### 1.2 AQS 的结构与原理
 
-`AQS` 核心思想是：
+`AQS`是基于一个`FIFO`的**双向队列**，其内部定义了一个节点类 `Node`，`Node` 节点内部的：
 
-+ 如果被请求的**共享资源空闲**，则将当前请求资源的线程设置为有效的工作线程，并且将共享资源设置为锁定状态；
-+ 如果被请求的**共享资源被占用**，那么就需要一套线程阻塞等待以及被唤醒时锁分配的机制，这个机制 AQS 是用 **CLH 队列锁**实现的，即将暂时获取不到锁的线程加入到队列中。
++ `SHARED`【共享】用来标记该线程是 **获取共享资源时被阻塞挂起** 后放入`AQS` 队列的
++ `EXCLUSIVE` 【独占】用来标记线程是 **获取独占资源时被挂起** 后放入`AQS` 队列
+
+`AQS` 使用一个由 `volatile` 修饰的 `int` 类型的成员变量 `state` 来表示 **同步状态**，修改同步状态成功即为获得锁。
+
+![image-20221007204104596](https://img.zxdmy.com/2022/202210072041658.png)
+
+获取`state`的方式分为两种，**独占方式**和**共享方式**：
+
++ 一个线程使用**独占方式**获取了资源，其它线程就会在获取失败后被阻塞。
++ 一个线程使用**共享方式**获取了资源，另外一个线程还可以通过`CAS`的方式进行获取。
+
+如果**共享资源**被占用，需要一定的**阻塞等待唤醒机制**来保证锁的分配，`AQS` 中会将竞争共享资源失败的线程添加到一个变体的 `CLH` 队列中。
+
+`CLH` 队列，是 **单向链表** 实现的 **队列**。
+
+申请线程只在本地变量上自旋，其**不断轮询前驱的状态**，如果发现 **前驱节点释放了锁就结束自旋**。
+
+![image-20221007204145836](B-9、并发包类 JUC.assets/image-20221007204145836.png)
+
+`AQS` 中的队列是 `CLH` 变体的**虚拟双向队列**，通过**将每条请求共享资源的线程封装成一个节点来实现锁的分配**：
+
+![image-20221007204335546](B-9、并发包类 JUC.assets/image-20221007204335546.png)
 
 ![image-20220815202958637](https://img.zxdmy.com/2022/202208152029944.png)
+
+`AQS` 中的 `CLH` **变体** **等待队列** 拥有以下 **特性**：
+
++ `AQS` 中队列是个 **双向链表**，也是 `FIFO` 先进先出的特性；
++ 通过 `Head`、`Tail` 头尾两个节点来组成队列结构，通过 `volatile` 修饰保证可见性；
++ `Head` 指向节点为 **已获得锁的节点**，是一个虚拟节点，节点本身不持有具体线程；
++ 获取不到同步状态，会将节点进行**自旋**获取锁，自旋一定次数失败后会将线程**阻塞**，相对于 `CLH` 队列性能较好。
 
 ## 2、Lock 接口及其实现类（ReentrantLock等）
 
@@ -80,6 +110,8 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
 
 ### 2.3 ReentrantLock 的高级功能
 
+`ReentrantLock` 是可重入的**独占锁**，只能有一个线程可以获取该锁，其它获取该锁的线程会被阻塞而被放入该锁的阻塞队列里面。
+
 #### 等待可中断
 
 指当前有锁的线程长时间不释放锁时，正在等待的线程可以选择放弃等待，改做其他事情。
@@ -93,11 +125,17 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
 + **公平锁** 指多个线程等待同一个锁时，必须 **按照申请锁的时间顺序依次获得锁**。
 + **非公平锁** 则在锁被释放时，任何一个等待锁的线程**都有机会获得锁**。
 
-`ReentrantLock` 默认是非公平的。
+`new ReentrantLock()` **构造函数** 默认创建的是**非公平锁** `NonfairSync()`。
 
-**可以使用 `ReentrantLock` 类的 `ReentrantLock(boolean fair)` 构造方法来制定是否是公平的**。
+**可以使用 `ReentrantLock` 类的 `ReentrantLock(boolean fair)` 构造方法来制定是否是公平的**，进而创建公平锁 `FairSync()`。
 
-注意：如果使用了公平锁，会导致 ReentrantLock 的性能急剧下降，明显降低吞吐量。
+`FairSync()`、`NonfairSync()` 代表 **公平锁** 和 **非公平锁**，两者都是 `ReentrantLock` **静态内部类**，只不过 **实现不同锁语义**。
+
+> 注意：
+>
+> **非公平锁**在调用 `lock` 后，首先就会调用 `CAS` 进行一次抢锁，如果这个时候恰巧锁没有被占用，那么直接就获取到锁返回了，性能较高。
+>
+> 如果使用了**公平锁**，会判断等待队列是否有线程处于等待状态，有则不抢锁，排到队列中。这将导致 **吞吐量明显降低**， `ReentrantLock` 的性能急剧下降。
 
 #### 锁绑定多个条件（实现选择性通知）
 
@@ -221,12 +259,12 @@ class ThreadB extends Thread {
 |  区别点  |           synchronized 关键词            |         Lock / ReentrantLock 接口          |
 | :------: | :--------------------------------------: | :----------------------------------------: |
 |  锁类型  |                 可重入锁                 |                  可重入锁                  |
+|  锁实现  |      基于 **JVM**，对象头监视器模式      |          基于 **API**，依赖 `AQS`          |
 | 等待中断 |                 不可中断                 |   `lock.lockInterruptibly()` 可实现中断    |
 |  公平锁  |                 非公平锁                 | `ReentrantLock(boolean fair)` 可实现公平锁 |
 | 关联通知 |         关联一个通知：`notify()`         | 关联多个通知：多次调用 `newCondition` 实现 |
 |   用法   |   给 **类**、**方法**、**代码块** 加锁   |           只能给 **代码块** 加锁           |
 | 锁的取舍 | **自动**获取和释放锁，异常释放锁，无死锁 |    **手动**加锁和释放锁，处理不当会死锁    |
-|   实现   |               基于 **JVM**               |                基于 **API**                |
 |  锁状态  |             无法判断锁的状态             |   可通过 `tryLock()` 验证线程是否拿到锁    |
 | 读读操作 |                 依次进行                 |   `ReentrantReadWriteLock()` 可多线程读    |
 
@@ -241,7 +279,7 @@ class ThreadB extends Thread {
 
 ## 3、Atomic（原子类）
 
-#### 简介与类型
+### 3.1 原子类的简介与类型
 
 `Atomic` （英：原子的）是指一个**操作是不可中断的**。即使是在多个线程一起执行的时候，一个操作一旦开始，就不会被其他线程干扰。
 
@@ -251,35 +289,39 @@ class ThreadB extends Thread {
 
 ![image-20220815190343685](https://img.zxdmy.com/2022/202208151903612.png)
 
-根据**操作的数据类型**，可以将 `JUC` 包中的**原子类**分为 4 类。
+`Atomic`包里的类基本都是使用`Unsafe`实现的**包装类**。
+
+根据 **操作的数据类型**，可以将 `JUC` 包中的**原子类**分为 4 类。
 
 **基本类型**：使用原子的方式更新基本类型
 
-+ AtomicInteger：整型原子类
-+ AtomicLong：长整型原子类
-+ AtomicBoolean ：布尔型原子类
++ `AtomicInteger`：整型原子类
++ `AtomicLong`：长整型原子类
++ `AtomicBoolean` ：布尔型原子类
 
 **数组类型**：使用原子的方式更新数组里的某个元素
 
-- AtomicIntegerArray：整型数组原子类
-- AtomicLongArray：长整型数组原子类
-- AtomicReferenceArray ：引用类型数组原子类
+- `AtomicIntegerArray`：整型数组原子类
+- `AtomicLongArray`：长整型数组原子类
+- `AtomicReferenceArray` ：引用类型数组原子类
 
-**引用类型**：
+**引用类型**：如果要原子更新多个变量，则使用原子更新引用类型提供的类
 
-- AtomicReference：引用类型原子类
-- AtomicMarkableReference：原子更新带有标记的引用类型。该类将 boolean 标记与引用关联起来。（不能解决 ABA 问题）
-- **AtomicStampedReference** ：原子更新带有版本号的引用类型。该类将整数值与引用关联起来，可用于解决原子的更新数据和数据的版本号，**可以解决使用 CAS 进行原子更新时可能出现的 ABA 问题**。
+- `AtomicReference`：引用类型原子类
+- `AtomicMarkableReference`：原子更新带有标记的引用类型。该类将 boolean 标记与引用关联起来。（不能解决 ABA 问题）
+- **`AtomicStampedReference`** ：原子更新带有版本号的引用类型。该类将整数值与引用关联起来，可用于解决原子的更新数据和数据的版本号，**可以解决使用 CAS 进行原子更新时可能出现的 ABA 问题**。
 
-**对象的属性修改类型**：
+**对象的属性修改类型**：如果需要原子地更新某个类里的某个字段，需要使用原子更新字段类
 
-- AtomicIntegerFieldUpdater:原子更新整型字段的更新器
-- AtomicLongFieldUpdater：原子更新长整型字段的更新器
-- AtomicReferenceFieldUpdater：原子更新引用类型里的字段
+- `AtomicIntegerFieldUpdater`:原子更新整型字段的更新器
+- `AtomicLongFieldUpdater`：原子更新长整型字段的更新器
+- `AtomicReferenceFieldUpdater`：原子更新引用类型里的字段
 
-#### 基本类型原子类的原理与使用示例
+### 3.2 基本类型原子类的原理与使用示例
 
-AtomicInteger 类的部分源码如下：
+>  基本类型原子类使用`CAS`实现。
+
+`AtomicInteger` 类的部分源码如下：
 
 ```java
     // setup to use Unsafe.compareAndSwapInt for updates
@@ -305,6 +347,34 @@ AtomicInteger 类的部分源码如下：
 
 另外 `value` 是一个 `volatile` 变量，在**内存中可见**，因此 JVM 可以**保证任何时刻任何线程总能拿到该变量的最新值**。
 
+再如：
+
+以`AtomicInteger`的**添加方法**为例：
+
+```java
+public final int getAndIncrement() {
+    return unsafe.getAndAddInt(this, valueOffset, 1);
+}
+```
+
+通过`Unsafe` 类的实例来进行**添加**操作，来看看具体的`CAS`操作：
+
+```java
+public final int getAndAddInt(Object var1, long var2, int var4) {
+    int var5;
+    do {
+        var5 = this.getIntVolatile(var1, var2);
+    } while(!this.compareAndSwapInt(var1, var2, var5,var5 + var4));
+    return var5;
+}
+```
+
+`compareAndSwapInt` 是一个`native`方法，基于`CAS`来操作`int`类型变量。
+
+其它的原子操作类基本都是大同小异。
+
+---
+
 下面是 **多线程环境使用基本数据类型原子类保证线程安全** 的示例：
 
 ```java
@@ -327,7 +397,7 @@ public class AtomicTest {
 
 最终输出的结果是 **100000**。
 
-#### 引用类型原子类的使用示例
+### 3.3 引用类型原子类的使用示例
 
 `AtomicReference` 类使用示例：
 
@@ -388,7 +458,7 @@ threadPoolExecutor.execute(() -> atomicReference.compareAndSet(user, newUser));
 
 在第 `2` 次及以后的循环中，引用原子类内的 `User` 值为 `newUser`，与方法 `compareAndSet(user, newUser)` 的第一个参数匹配失败，无法执行该方法。
 
-#### 对象的属性修改类型原子类的使用示例
+### 3.4 对象的属性修改类型原子类的使用示例
 
 要想原子地更新对象的属性需要两步。
 
@@ -427,4 +497,41 @@ class People {
     // 以下省略
 }
 ```
+
+## 4、并发工具类
+
+### 4.1 CountDownLatch（倒计数器）
+
+`CountDownLatch`，倒计数器。
+
+场景 1：协调子线程**结束**动作：等待所有子线程运行结束
+
+`CountDownLatch`允许一个或多个线程等待其他线程完成操作。
+
+场景 2：协调子线程**开始**动作：统一各线程动作开始的时机
+
+`CountDownLatch` 的核心方法也不多：
+
++ `await()` ：等待 latch 降为 0；
++ `boolean await(long timeout, TimeUnit unit)` ：等待latch降为0，但是可以设置超时时间。比如有玩家超时未确认，那就重新匹配，总不能为了某个玩家等到天荒地老。
++ `countDown()` ：latch数量减1；
++ `getCount()` ：获取当前的latch数量。
+
+### 4.2 CyclicBarrier（同步屏障）
+
+`CyclicBarrier`的字面意思是可循环使用（Cyclic）的屏障（Barrier）。
+
+它要做的事情是，让一组线程到达一个屏障（也可以叫**同步点**）时被阻塞，直到最后一个线程到达屏障时，屏障才会开门，所有被屏障拦截的线程才会继续运行。
+
+### 4.3 Semaphore（信号量）
+
+`Semaphore`（信号量）是用来控制同时访问特定资源的线程数量，它通过协调各个线程，以保证合理的使用公共资源。
+
+### 4.4 Exchanger（交换者）
+
+`Exchanger`（交换者）是一个用于线程间协作的工具类。
+
+Exchanger用于进行**线程间的数据交换**。
+
+它提供一个同步点，在这个同步点，两个线程可以交换彼此的数据。
 
