@@ -1,75 +1,75 @@
-#### 剑指 Offer 03. 数组中重复的数字
+### 剑指 Offer 03. 数组中重复的数字
 
 链接：https://leetcode.cn/problems/shu-zu-zhong-zhong-fu-de-shu-zi-lcof/
 
 > 1. 直接用哈希表 `Set` 可以做。
 > 2. 直接原地交换，将值放入对应的索引位置。如果索引位置有相同的值，则返回。（其本质也是`hash`，**推荐**，速度更快）
 
-#### 剑指 Offer 04. 二维数组中的查找
+### 剑指 Offer 04. 二维数组中的查找
 
 `M` 链接：https://leetcode.cn/problems/er-wei-shu-zu-zhong-de-cha-zhao-lcof
 
 > 从右上角开始，向左（当前值大于目标值）和向下（当前值小于目标值）遍历，进行判断。
 
-#### 剑指 Offer 05. 替换空格
+### 剑指 Offer 05. 替换空格
 
 链接：https://leetcode.cn/problems/ti-huan-kong-ge-lcof/
 
 > 1. 直接用 `s.replace(" ", "%20");`
 > 2. 第一遍查找空格个数，然后扩容字符串数组，然后倒着遍历，遇到空格填充进去。
 
-#### 剑指 Offer 06. 从尾到头打印链表
+### 剑指 Offer 06. 从尾到头打印链表
 
 链接：https://leetcode.cn/problems/cong-wei-dao-tou-da-yin-lian-biao-lcof/
 
 > 1. 使用 list，先放到 list，再从末尾取放进数组。
 > 2. 使用栈（更慢）。
 
-#### 剑指 Offer 07. 重建二叉树
+### 剑指 Offer 07. 重建二叉树
 
 `M`
 
 > TODO
 
-#### 剑指 Offer 09. 用两个栈实现队列
+### 剑指 Offer 09. 用两个栈实现队列
 
 链接：https://leetcode.cn/problems/yong-liang-ge-zhan-shi-xian-dui-lie-lcof/
 
 > A 栈负责入栈，B 栈为空时，将 A 栈 倒进 B栈，再从B栈弹出
 
-#### 剑指 Offer 10- I. 斐波那契数列
+### 剑指 Offer 10- I. 斐波那契数列
 
 链接：https://leetcode.cn/problems/fei-bo-na-qi-shu-lie-lcof/
 
 > 1. 完全可以递归，但是容易栈溢出。
 > 2. 使用两个变量标记 `n-1` 和 `n-2` 的值，循环计算 `n` 的值。
 
-#### 剑指 Offer 10- II. 青蛙跳台阶问题
+### 剑指 Offer 10- II. 青蛙跳台阶问题
 
 链接：https://leetcode.cn/problems/qing-wa-tiao-tai-jie-wen-ti-lcof
 
 > 1. 也可以递归，但容易栈溢出。
 > 2. 方法同斐波那契数列。
 
-#### 剑指 Offer 12. 矩阵中的路径
+### 剑指 Offer 12. 矩阵中的路径
 
 `M` 链接：https://leetcode.cn/problems/ju-zhen-zhong-de-lu-jing-lcof
 
 > DFS，常规深搜题目。
 
-#### 剑指 Offer 14- I. 剪绳子
+### 剑指 Offer 14- I. 剪绳子
 
 `M` 链接：https://leetcode.cn/problems/jian-sheng-zi-lcof/
 
 > 长度大于 4 时，尽可能多的剪成长度为 3 的段。
 
-#### 剑指 Offer 14- II. 剪绳子 II
+### 剑指 Offer 14- II. 剪绳子 II
 
 `M` 链接：https://leetcode.cn/problems/jian-sheng-zi-ii-lcof/
 
 > 当长度大于 4 时，尽可能多的剪长度为 3 的绳子。多了中间求积是的取模。
 
-#### 剑指 Offer 15. 二进制中1的个数
+### 剑指 Offer 15. 二进制中1的个数
 
 链接：[https://leetcode.cn/problems/er-jin-zhi-zhong-1de-ge-shu-lcof/](https://leetcode.cn/problems/er-jin-zhi-zhong-1de-ge-shu-lcof/)
 
@@ -82,7 +82,7 @@ i = i + (i >>> 16);
 return i & 0x3f;
 ```
 
-#### 剑指 Offer 16. 数值的整数次方
+### 剑指 Offer 16. 数值的整数次方
 
 `M` 链接：https://leetcode.cn/problems/shu-zhi-de-zheng-shu-ci-fang-lcof/
 
@@ -103,7 +103,7 @@ double quickMul(double x, long n) {
 }
 ```
 
-#### 剑指 Offer 17. 打印从1到最大的n位数
+### 剑指 Offer 17. 打印从1到最大的n位数
 
 链接：[https://leetcode.cn/problems/da-yin-cong-1dao-zui-da-de-nwei-shu-lcof/](https://leetcode.cn/problems/da-yin-cong-1dao-zui-da-de-nwei-shu-lcof/)
 
@@ -123,7 +123,7 @@ int quickPow(int a, int b){
 }
 ```
 
-#### 剑指 Offer 18. 删除链表的节点
+### 剑指 Offer 18. 删除链表的节点
 
 链接：https://leetcode.cn/problems/shan-chu-lian-biao-de-jie-dian-lcof
 
@@ -133,13 +133,13 @@ int quickPow(int a, int b){
 
 
 
-#### 剑指 Offer 20. 表示数值的字符串
+### 剑指 Offer 20. 表示数值的字符串
 
 `M` 链接：https://leetcode.cn/problems/biao-shi-shu-zhi-de-zi-fu-chuan-lcof/
 
 > 遍历模拟，使用三个标记，记录是否出现num、dot、E|e，边界条件进行判断。
 
-#### 剑指 Offer 21. 调整数组顺序使奇数位于偶数前面
+### 剑指 Offer 21. 调整数组顺序使奇数位于偶数前面
 
 链接：https://leetcode.cn/problems/diao-zheng-shu-zu-shun-xu-shi-qi-shu-wei-yu-ou-shu-qian-mian-lcof/
 
@@ -147,7 +147,7 @@ int quickPow(int a, int b){
 
 
 
-#### 剑指 Offer 24. 反转链表
+### 剑指 Offer 24. 反转链表
 
 链接：[https://leetcode.cn/problems/fan-zhuan-lian-biao-lcof/](https://leetcode.cn/problems/fan-zhuan-lian-biao-lcof/)
 
@@ -155,25 +155,25 @@ int quickPow(int a, int b){
 >
 > 当链表长度大于 2 时，定义三个指针：pre, cur, next，pre负责指向反转后的链表的新的头结点，cur负责待反转的链表的第一个值，next负责指向cur的下一个待移动的指针（需要保证next不为空，才能 next = next.next）
 
-#### 剑指 Offer 25. 合并两个排序的链表
+### 剑指 Offer 25. 合并两个排序的链表
 
 链接：https://leetcode.cn/problems/he-bing-liang-ge-pai-xu-de-lian-biao-lcof/
 
 > 设置一个辅助的头结点，将两个链表追加至新的头结点上。最后返回头结点的next。
 
-#### 剑指 Offer 26. 树的子结构
+### 剑指 Offer 26. 树的子结构
 
 `M` 链接：https://leetcode.cn/problems/shu-de-zi-jie-gou-lcof/
 
 > DFS 即可。
 
-#### 剑指 Offer 27. 二叉树的镜像
+### 剑指 Offer 27. 二叉树的镜像
 
 链接：https://leetcode.cn/problems/er-cha-shu-de-jing-xiang-lcof/
 
 > 递归即可。
 
-#### 剑指 Offer 28. 对称的二叉树
+### 剑指 Offer 28. 对称的二叉树
 
 链接：https://leetcode.cn/problems/dui-cheng-de-er-cha-shu-lcof/
 
@@ -187,7 +187,7 @@ int quickPow(int a, int b){
 
 
 
-#### 剑指 Offer 30. 包含min函数的栈
+### 剑指 Offer 30. 包含min函数的栈
 
 链接：[https://leetcode.cn/problems/bao-han-minhan-shu-de-zhan-lcof/](https://leetcode.cn/problems/bao-han-minhan-shu-de-zhan-lcof/)
 
@@ -199,25 +199,25 @@ int quickPow(int a, int b){
 
 
 
-#### 剑指 Offer 31. 栈的压入、弹出序列
+### 剑指 Offer 31. 栈的压入、弹出序列
 
 `M` 链接：https://leetcode.cn/problems/zhan-de-ya-ru-dan-chu-xu-lie-lcof/
 
 > 模拟题，两个指针，一个栈模拟，将push元素入栈。如果栈顶元素与pop元素一致，则循环弹出。
 
-#### 剑指 Offer 32 - I. 从上到下打印二叉树
+### 剑指 Offer 32 - I. 从上到下打印二叉树
 
 `M` 链接：https://leetcode.cn/problems/cong-shang-dao-xia-da-yin-er-cha-shu-lcof/
 
 > 数的层序遍历。使用队列存放节点。队列不为空，则取出队头的点，然后将该点的左右孩子入队列。
 
-#### 剑指 Offer 32 - II. 从上到下打印二叉树 II
+### 剑指 Offer 32 - II. 从上到下打印二叉树 II
 
 链接：https://leetcode.cn/problems/cong-shang-dao-xia-da-yin-er-cha-shu-ii-lcof/
 
 > DFS 即可。
 
-#### 剑指 Offer 32 - III. 从上到下打印二叉树 III
+### 剑指 Offer 32 - III. 从上到下打印二叉树 III
 
 `M` 链接：https://leetcode.cn/problems/cong-shang-dao-xia-da-yin-er-cha-shu-iii-lcof/
 
@@ -227,13 +227,13 @@ int quickPow(int a, int b){
 
 
 
-#### 剑指 Offer 34. 二叉树中和为某一值的路径
+### 剑指 Offer 34. 二叉树中和为某一值的路径
 
 `M` 链接：https://leetcode.cn/problems/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-jing-lcof/
 
 > DFS，从根节点到叶子节点即可。
 
-#### 剑指 Offer 35. 复杂链表的复制
+### 剑指 Offer 35. 复杂链表的复制
 
 `M` 链接：https://leetcode.cn/problems/fu-za-lian-biao-de-fu-zhi-lcof/
 
@@ -243,19 +243,19 @@ int quickPow(int a, int b){
 
 
 
-#### 剑指 Offer 38. 字符串的排列
+### 剑指 Offer 38. 字符串的排列
 
 `M` 链接：https://leetcode.cn/problems/zi-fu-chuan-de-pai-lie-lcof/
 
 > DFS。通过一个标记，记录每次深搜时，已经被访问的位置。使用set去重。
 
-#### 剑指 Offer 39. 数组中出现次数超过一半的数字
+### 剑指 Offer 39. 数组中出现次数超过一半的数字
 
 链接：https://leetcode.cn/problems/shu-zu-zhong-chu-xian-ci-shu-chao-guo-yi-ban-de-shu-zi-lcof/
 
 > 摩尔投票法： **票数正负抵消** 。两个变量，当前被选举者，以及被选举者的票数。相同则票数自增，否则自减。票数为0则替换被选举者。
 
-#### 剑指 Offer 40. 最小的k个数
+### 剑指 Offer 40. 最小的k个数
 
 链接：https://leetcode.cn/problems/zui-xiao-de-kge-shu-lcof/
 
@@ -267,7 +267,7 @@ int quickPow(int a, int b){
 
 
 
-#### 剑指 Offer 42. 连续子数组的最大和
+### 剑指 Offer 42. 连续子数组的最大和
 
 链接：https://leetcode.cn/problems/lian-xu-zi-shu-zu-de-zui-da-he-lcof/
 
@@ -277,7 +277,7 @@ int quickPow(int a, int b){
 
 
 
-#### 剑指 Offer 44. 数字序列中某一位的数字
+### 剑指 Offer 44. 数字序列中某一位的数字
 
 `M` 链接：https://leetcode.cn/problems/shu-zi-xu-lie-zhong-mou-yi-wei-de-shu-zi-lcof/
 
@@ -285,7 +285,7 @@ int quickPow(int a, int b){
 
 
 
-#### 剑指 Offer 45. 把数组排成最小的数
+### 剑指 Offer 45. 把数组排成最小的数
 
 `M` 链接：https://leetcode.cn/problems/ba-shu-zu-pai-cheng-zui-xiao-de-shu-lcof/
 
@@ -295,25 +295,25 @@ int quickPow(int a, int b){
 
 
 
-#### 剑指 Offer 47. 礼物的最大价值
+### 剑指 Offer 47. 礼物的最大价值
 
 `M` 链接：https://leetcode.cn/problems/li-wu-de-zui-da-jie-zhi-lcof/
 
 > 常规 DP 问题。(i,j) 的礼物价值，选左、上的最大者，再求和。
 
-#### 剑指 Offer 48. 最长不含重复字符的子字符串
+### 剑指 Offer 48. 最长不含重复字符的子字符串
 
 `M` 链接：[https://leetcode.cn/problems/zui-chang-bu-han-zhong-fu-zi-fu-de-zi-zi-fu-chuan-lcof/](https://leetcode.cn/problems/zui-chang-bu-han-zhong-fu-zi-fu-de-zi-zi-fu-chuan-lcof/)
 
 > 滑动窗口，用set维护一个不重复的窗口，双指针方法，使用一个集合存放左右指针之间的字符。如果当前字符在集合中，则左指针需要右移，直至set中不存在该字符，然后加入当前字符，再计算l 和 r 之间的长度。
 
-#### 剑指 Offer 49. 丑数
+### 剑指 Offer 49. 丑数
 
 `M` 链接：https://leetcode.cn/problems/chou-shu-lcof/
 
 > dp问题。一个丑数通过另一个丑数 * 2 3 5 得到，使用三个指针维护2、3、5的位置， 每次都选取最小的一个。
 
-#### 剑指 Offer 50. 第一个只出现一次的字符
+### 剑指 Offer 50. 第一个只出现一次的字符
 
 链接：https://leetcode.cn/problems/di-yi-ge-zhi-chu-xian-yi-ci-de-zi-fu-lcof/
 
@@ -323,7 +323,7 @@ int quickPow(int a, int b){
 
 
 
-#### 剑指 Offer 52. 两个链表的第一个公共节点
+### 剑指 Offer 52. 两个链表的第一个公共节点
 
 链接：https://leetcode.cn/problems/liang-ge-lian-biao-de-di-yi-ge-gong-gong-jie-dian-lcof/
 
@@ -331,37 +331,40 @@ int quickPow(int a, int b){
 >
 > 人话：只要两个指针不相等，就一直循环，到尾巴后，切换至另一个链表。
 
-#### 剑指 Offer 53 - I. 在排序数组中查找数字 I
+### 剑指 Offer 53 - I. 在排序数组中查找数字 I
 
 链接：https://leetcode.cn/problems/zai-pai-xu-shu-zu-zhong-cha-zhao-shu-zi-lcof/
 
 > 二分。注意边界。
 
-#### 剑指 Offer 53 - II. 0～n-1中缺失的数字
+### 剑指 Offer 53 - II. 0～n-1中缺失的数字
 
 链接：https://leetcode.cn/problems/que-shi-de-shu-zi-lcof/
 
 > 二分，找到不存在的值的坐标。
 
+### 剑指 Offer 54. 二叉搜索树的第k大节点
 
+链接：https://leetcode.cn/problems/er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof/
 
+> 这里考查的二叉搜索树的特性：**中序遍历** 是有序的（递增）。所以 **逆中序遍历** 是递减的。
+>
+> 所以只需要按 **右 → 中 → 左** 的顺序 `dfs` ，递归 k 次即为所求。
 
-
-#### 剑指 Offer 55 - I. 二叉树的深度
+### 剑指 Offer 55 - I. 二叉树的深度
 
 链接：https://leetcode.cn/problems/er-cha-shu-de-shen-du-lcof/
 
 > 常规DFS。
 
+### 剑指 Offer 55 - II. 平衡二叉树
 
+链接：https://leetcode.cn/problems/ping-heng-er-cha-shu-lcof/
 
+> 1. 整个树是平衡二叉树，则每个子树必然是平衡二叉树，可以采用这种思想，DFS。
+> 2. 采用自底向上，递归求左右子树的高度，如果高度差已经大于1，则必然不是，返回 -1，其他情况返回树的高度。
 
-
-
-
-
-
-#### 剑指 Offer 56 - I. 数组中数字出现的次数
+### 剑指 Offer 56 - I. 数组中数字出现的次数
 
 `M` 链接：[https://leetcode.cn/problems/shu-zu-zhong-shu-zi-chu-xian-de-ci-shu-lcof/](https://leetcode.cn/problems/shu-zu-zhong-shu-zi-chu-xian-de-ci-shu-lcof/)
 
@@ -373,27 +376,28 @@ int quickPow(int a, int b){
 >
 > 第三次，再 与，和特征位相与后是0，说明是x，否则是y，再与所有的值 异或
 
-#### 剑指 Offer 56 - II. 数组中数字出现的次数 II
+### 剑指 Offer 56 - II. 数组中数字出现的次数 II
 
 `M` 链接：[https://leetcode.cn/problems/shu-zu-zhong-shu-zi-chu-xian-de-ci-shu-ii-lcof](https://leetcode.cn/problems/shu-zu-zhong-shu-zi-chu-xian-de-ci-shu-ii-lcof)
 
 > 位运算的思想。通过一个32位长的数组，记录所有数的二进制中，各个位的1 的个数。然后各个数值除以三取余，余数即为多的那个数的1。
 
-#### 剑指 Offer 57. 和为s的两个数字
+### 剑指 Offer 57. 和为s的两个数字
 
 链接：https://leetcode.cn/problems/he-wei-sde-liang-ge-shu-zi-lcof/
 
 > 双指针问题。等于目标值返回，小于目标值左侧自增，大于目标值右侧自减。
 
-#### 剑指 Offer 57 - II. 和为s的连续正数序列
+### 剑指 Offer 57 - II. 和为s的连续正数序列
 
 链接：https://leetcode.cn/problems/he-wei-sde-lian-xu-zheng-shu-xu-lie-lcof/
 
-> 可以用双指针， 也可以用数学等差数列。
+> 1. 用双指针， 都从 1 开始右移。右指针每移动一次，都判断区间和大小。区间和大于目标值，和减去左指针的同时左指针右移。等于目标值则添加至列表中。
+> 2. 用数学等差数列，但是公式难推导。
 
-#### 剑指 Offer 58 - I. 翻转单词顺序
+### 剑指 Offer 58 - I. 翻转单词顺序
 
-链接：
+链接：https://leetcode.cn/problems/fan-zhuan-dan-ci-shun-xu-lcof/
 
 > 可以用双指针。
 >
@@ -403,13 +407,13 @@ int quickPow(int a, int b){
 
 
 
-#### 剑指 Offer 61. 扑克牌中的顺子
+### 剑指 Offer 61. 扑克牌中的顺子
 
 链接：https://leetcode.cn/problems/bu-ke-pai-zhong-de-shun-zi-lcof/
 
 > 最大的牌减去最小的牌，插值不能大于等于5，同时不允许有重复（0 除外）。
 
-#### 剑指 Offer 62. 圆圈中最后剩下的数字
+### 剑指 Offer 62. 圆圈中最后剩下的数字
 
 链接：https://leetcode.cn/problems/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-lcof/
 
@@ -420,7 +424,7 @@ int quickPow(int a, int b){
 > + `f(3, M) = ( f(2,M) + M ) % 3` ;
 > + ……
 
-#### 剑指 Offer 63. 股票的最大利润
+### 剑指 Offer 63. 股票的最大利润
 
 `M` 链接：[https://leetcode.cn/problems/gu-piao-de-zui-da-li-run-lcof/](https://leetcode.cn/problems/gu-piao-de-zui-da-li-run-lcof/)
 
@@ -430,9 +434,24 @@ int quickPow(int a, int b){
 
 
 
-#### 剑指 Offer 66. 构建乘积数组
+### 剑指 Offer 66. 构建乘积数组
 
 `M` 链接：https://leetcode.cn/problems/gou-jian-cheng-ji-shu-zu-lcof/
 
 > 由于不能用乘法，就分成两个三角形：右上三角和左下三角，分开累乘。
+
+
+
+### 剑指 Offer 68 - I. 二叉搜索树的最近公共祖先
+
+链接：https://leetcode.cn/problems/er-cha-sou-suo-shu-de-zui-jin-gong-gong-zu-xian-lcof/
+
+> 递归，如果两个点均在当前根节点左边/右边，则递归`root.left/root.right`，直至两个节点不在同一侧，此时根节点即为所求。
+
+### 剑指 Offer 68 - II. 二叉树的最近公共祖先
+
+链接：https://leetcode.cn/problems/er-cha-shu-de-zui-jin-gong-gong-zu-xian-lcof/
+
+> 1. 采用常规思路，采用先序遍历的方式，通过两个列表保存到p、q的路径，然后遍历两个路径找最后相同的公共节点。
+> 2. 采用递归的思路，判断p、q节点在左、右子树的哪一个。
 
