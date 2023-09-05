@@ -120,6 +120,106 @@ Pigeon 可以配置 `<pigeon:annotation package="com.dianping.pigeon.demo.annota
 
 ![image-20230904224943256](https://img.zxdmy.com/2022/202309042249362.png)
 
+## 3、服务注册发布
+
+如下是最简服务提供者的注册方法示例：
+
+```java
+public static void main(String[] args) throws Exception {
+    // 初始化ProviderConfig，服务接口是EchoService，具体服务提供者是EchoServiceDefaultImpl
+    ProviderConfig<EchoService> providerConfig = new ProviderConfig<EchoService>(EchoService.class, new EchoServiceDefaultImpl());
+    // 调用URL
+    String url = "com.dianping.pigeon.demo.EchoService";
+    providerConfig.setUrl(url);
+    // 注册服务
+    ServiceFactory.addService(providerConfig);
+}
+```
+
+每个接口服务都以 `ProviderConfig` 类作为元数据，映射一个服务调用接口。
+
+其中定义了相关属性，如提供服务的抽象接口类型`serviceInterface`、访问服务的`url`等等，如下图所示：
+
+![image-20230905230239897](https://img.zxdmy.com/2022/202309052302173.png)
+
+`ServerConfig` 则对应一个服务器进程，其具体服务器，可为基于`netty`的`RPC`服务器，也可为基于`jetty`的`HTTP`服务器。
+
+![image-20230905230937942](https://img.zxdmy.com/2022/202309052313829.png)
+
+### 3.1 服务提供方静态初始化流程
+
+示例中，`ServiceFactory.addService(providerConfig);` 完成服务注册，在调用 `addService()` 方法之前，会触发 `ServiceFactory` 的静态初始化，如下图所示：
+
+![image-20230905231305256](https://img.zxdmy.com/2022/202309052313412.png)
+
+其具体初始化工作，主要包括如下三部分：
+
+1. 初始化`serviceProxy`，提供作为调用方的信息注册，和服务代理获取；
+2. 初始化`publishPolicy`，针对特定的`providerConfig`进行服务注册；
+3. 调用`ProviderBootStrap.init()`初始化调用`ProviderBootStrap`。
+
+`ProviderBootStrap` 是服务提供者的核心启动类，内部如下：
+
+![image-20230905231710504](https://img.zxdmy.com/2022/202309052317200.png)
+
+主要包括以下初始化流程：
+
+1. `ProviderProcessHandlerFactory.init()` 初始化所有相关拦截器
+2. `SerializerFactory.init()` 初始化所有序列化方式
+3. `ClassUtils.loadClasses(“com.dianping.pigeon”)` 预加载所有Pigeon相关的类
+4. 注册关闭钩子`ShutdownHookListener`，内部调用`ServiceFactory.unpublishAllServices()`进程完成相关清理工作
+5. `RegistryManager.getInstance()` 初始化注册管理器
+6. 加载服务器，默认包括 `NettyServer` 和 `JettyHttpServer`，当前会注册HTTP服务器
+    1. 启动`http`服务器，默认注册到4080
+    2. 设置`consoleServer`，初始化注册配置
+
+### 3.2 服务提供方发布服务
+
+调用 `ServiceFactory#addService` 方法，会进一步调用 `DefaultPublishPolicy#doAddService`，最后调用的是抽象父类 `AbstractPublishPolicy#doAddService` 方法。
+
+`AbstractPublishPolicy#doAddService` 方法具体源码如下：
+
+![image-20230905232419334](https://img.zxdmy.com/2022/202309052324616.png)
+
+#### 检查服务名
+
+如果自定义了访问url，和默认服务名（接口全限定名）不一致，会检查服务是否为存量服务，如果不是，会判断配置是否允许自定义服务名，如果允许，则使用自定义服务名，否则会抛出异常或强制转换为类路径服务名。
+
+#### 解析服务方法
+
++ 判断是否配置了版本， 如果配置了，生成带版本的`urlWithVersion`，更新`key=urlWithVersion`的服务，同时如果大于`key=url`的对应服务版本，会用新版本覆盖默认url版本;
+
++ 如果服务实现了`InitializingService`接口，调用实现的`initialize`方法
+
++ 调用`ServiceMethodFactory.init(url)`方法，用来初始化调用`ServiceMethodFactory`的`ServiceMethodCache`：
+    + 遍历`ServicePublisher`的所有服务提供类，建立`ServiceMethodCache`，存储该类下所有满足要求的方法和方法id的映射关系
+    + 首先会忽略掉Object和Class的所有方法
+    + 过滤方法后，判断是否需要压缩，根据`url+"#"+方法名` 的方式进行`hash`
+
+#### 启动netty RPC服务器
+
+根据protocol+port判断当前服务器列表中是否存在相关的服务器实例，如果不存在先创建一个，然后再添加服务，再创建新的服务器实例后，会先预启动内部的请求处理器核心线程；
+
+#### 发布服务到注册中心
+
+具体流程如下：
+
+1. 先遍历缓存的服务，根据url判断服务是否已存在，记录在existingService变量，如果不存在服务，直接结束，否则继续进行下面流程；
+2. 读取配置判断是否允许自动发布；
+3. 调用publishServiceToRegistry方法将服务发布到注册中心；
+4. 如果注册数量大于0，判断配置创建线程进行健康检查，健康检查的原理是通过serviceAddress建立映射关系，定期将当前时间戳更新到注册中心（zookeeper）上；
+5. 读取配置判断是否需要调用notifyServicePublished方法通知所有的serviceChangeListener服务已发布；
+6. 读取配置判断是否允许自动注册，如果允许，启动ServiceOnlineTask线程，会定时调用ServiceFactory.online()方法，更新服务权重，以提供向外调用；
+7. 设置providerConfig发布成功标志。
+
+
+
+## 4、服务发现
+
+
+
+## 5、服务调用
+
 
 
 参考资料：
