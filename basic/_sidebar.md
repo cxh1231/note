@@ -17,4 +17,5 @@
     + [:globe_with_meridians: 计算机网络](/basic/cs-basic/network/index.md)
     + :floppy_disk: 计算机组成原理
 + **:books: 更多**
+    + [Git](/basic/tool/git.md)
     + [C++相关](/wjl/README.md)
